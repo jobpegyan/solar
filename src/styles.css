@@ -1,0 +1,70 @@
+@import "tailwindcss";
+
+@theme {
+  /* System colors for shadcn-like components */
+  --color-background: white;
+  --color-foreground: #0f172a;
+  
+  --color-card: white;
+  --color-card-foreground: #0f172a;
+  
+  --color-popover: white;
+  --color-popover-foreground: #0f172a;
+  
+  --color-primary: #FFB800;
+  --color-primary-foreground: white;
+  
+  --color-secondary: #f1f5f9;
+  --color-secondary-foreground: #0f172a;
+  
+  --color-muted: #f1f5f9;
+  --color-muted-foreground: #64748b;
+  
+  --color-accent: #f1f5f9;
+  --color-accent-foreground: #0f172a;
+  
+  --color-destructive: #ef4444;
+  --color-destructive-foreground: #f8fafc;
+  
+  --color-border: #e2e8f0;
+  --color-input: #e2e8f0;
+  --color-ring: #FFB800;
+
+  --radius-lg: 0.5rem;
+  --radius-md: calc(0.5rem - 2px);
+  --radius-sm: calc(0.5rem - 4px);
+
+  /* Custom project colors */
+  --color-solar: #FFB800;
+  --color-solar-hover: #E6A600;
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+
+@media print {
+  .print\:hidden {
+    display: none !important;
+  }
+  .print\:border {
+    border: 1px solid #e2e8f0 !important;
+  }
+  .print\:bg-white {
+    background-color: white !important;
+  }
+  .print\:text-slate-900 {
+    color: #0f172a !important;
+  }
+  .print\:shadow-none {
+    box-shadow: none !important;
+  }
+  body {
+    background-color: white !important;
+  }
+}
