@@ -23,7 +23,7 @@ export const calculateSolarSystem = createServerFn({ method: "POST" })
     soilingLosses: z.number().optional(),
     targetOffset: z.number().optional().default(100),
     systemSizeKW: z.number().optional().nullable(),
-  }).parse(data))
+  }).passthrough().parse(data))
   .handler(async ({ data }) => {
     const results = await calculateSystemSizeInternal({
       monthlyUsageKWh: data.monthlyUsageKWh ?? undefined,

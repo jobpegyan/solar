@@ -13,7 +13,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Switch } from "@/components/ui/switch";
 import { useServerFn } from '@tanstack/react-start';
 import { calculateSolarSystem } from '@/lib/calculations/solar.functions';
-import { SystemResults } from '@/lib/calculations/solar-system';
+import { SystemResults, calculateSystemSize } from '@/lib/calculations/solar-system';
 import { LoadCalculator } from './LoadCalculator';
 import { saveCalculation } from '@/lib/saved-calculations.functions';
 import { trackConversion } from '@/lib/monetization/analytics.functions';
@@ -180,20 +180,31 @@ export function SharedCalculator({
       }
 
       if (onResultsChange) {
-        const results = await calculateFn({ data: inputs });
+        let results;
+        try {
+          results = await calculateFn({ data: inputs });
+        } catch (serverErr) {
+          console.warn("ServerFn calculation failed, using local engine fallback:", serverErr);
+          results = await calculateSystemSize(inputs);
+        }
+
         setLastResults({ ...results, inputs });
         onResultsChange({
           ...results,
           inputs
         });
 
-        trackFn({
-          data: {
-            eventName: 'calculator_completed',
-            calculatorId,
-            metadata: { country: country.code, mode }
-          }
-        });
+        try {
+          trackFn({
+            data: {
+              eventName: 'calculator_completed',
+              calculatorId,
+              metadata: { country: country.code, mode }
+            }
+          });
+        } catch (_) {
+          // ignore tracking errors
+        }
       }
     } catch (error) {
       console.error("Calculation error:", error);
