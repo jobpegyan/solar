@@ -23,6 +23,9 @@ export const calculateSolarSystem = createServerFn({ method: "POST" })
     soilingLosses: z.number().optional(),
     targetOffset: z.number().optional().default(100),
     systemSizeKW: z.number().optional().nullable(),
+    costPerWatt: z.number().optional(),
+    includeTaxCredit: z.boolean().optional(),
+    taxCreditPct: z.number().optional(),
   }).passthrough().parse(data))
   .handler(async ({ data }) => {
     const results = await calculateSystemSizeInternal({
@@ -45,6 +48,9 @@ export const calculateSolarSystem = createServerFn({ method: "POST" })
       soilingLosses: data.soilingLosses,
       targetSystemSizeKW: data.systemSizeKW ?? undefined,
       targetOffset: data.targetOffset,
+      costPerWatt: data.costPerWatt,
+      includeTaxCredit: data.includeTaxCredit,
+      taxCreditPct: data.taxCreditPct,
     });
 
     return results;

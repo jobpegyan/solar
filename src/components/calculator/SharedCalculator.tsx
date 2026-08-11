@@ -33,19 +33,22 @@ interface SharedCalculatorProps {
   initialInputs?: any;
 }
 
-const CALCULATOR_SCHEMAS: Record<string, { visibleFields?: string[]; title?: string; defaultFixedMode?: 'bill' | 'usage' }> = {
+const CALCULATOR_SCHEMAS: Record<string, { visibleFields?: string[]; title?: string; defaultFixedMode?: 'bill' | 'usage' | 'size' }> = {
   'solar-panel-calculator': { title: 'Solar System Parameters' },
   'solar-panel-size-calculator': { visibleFields: ['usage', 'sunHours', 'panelWattage', 'targetOffset'], defaultFixedMode: 'usage', title: 'Panel Sizing Inputs' },
   'solar-system-size-calculator': { visibleFields: ['usage', 'rate', 'sunHours', 'panelWattage', 'targetOffset'], defaultFixedMode: 'usage', title: 'System Capacity Parameters' },
   'solar-panel-output-calculator': { visibleFields: ['solarArraySizeKW', 'sunHours'], title: 'Solar Generation Parameters' },
   'solar-energy-production-calculator': { visibleFields: ['solarArraySizeKW', 'sunHours'], title: 'Annual Production Parameters' },
   'solar-panel-savings-calculator': { visibleFields: ['bill', 'rate', 'targetOffset'], defaultFixedMode: 'bill', title: 'Financial Savings Inputs' },
-  'solar-panel-cost-calculator': { visibleFields: ['solarArraySizeKW', 'rate'], title: 'System Cost Parameters' },
+  'solar-panel-cost-calculator': { visibleFields: ['bill', 'usage', 'solarArraySizeKW', 'rate', 'costPerWatt', 'includeTaxCredit', 'targetOffset'], title: 'System Cost Parameters' },
+  'solar-panel-cost-calculator-usa': { visibleFields: ['bill', 'usage', 'solarArraySizeKW', 'rate', 'costPerWatt', 'includeTaxCredit', 'targetOffset'], title: 'USA Solar Cost Parameters' },
+  'solar-panel-cost-calculator-india': { visibleFields: ['bill', 'usage', 'solarArraySizeKW', 'rate', 'costPerWatt', 'includeTaxCredit', 'targetOffset'], title: 'India Solar Cost Parameters' },
+  'solar-cost-calculator': { visibleFields: ['bill', 'usage', 'solarArraySizeKW', 'rate', 'costPerWatt', 'includeTaxCredit', 'targetOffset'], title: 'System Installation Cost Parameters' },
   'solar-panel-roi-calculator': { visibleFields: ['bill', 'rate', 'solarArraySizeKW'], defaultFixedMode: 'bill', title: 'ROI & Return Parameters' },
   'solar-payback-period-calculator': { visibleFields: ['bill', 'rate', 'solarArraySizeKW'], defaultFixedMode: 'bill', title: 'Payback Inputs' },
   'solar-bill-savings-calculator': { visibleFields: ['bill', 'rate'], defaultFixedMode: 'bill', title: 'Utility Bill Parameters' },
   'solar-electricity-cost-calculator': { visibleFields: ['solarArraySizeKW', 'bill', 'rate'], title: 'LCOE Cost Parameters' },
-  'solar-installation-cost-calculator': { visibleFields: ['solarArraySizeKW', 'rate'], title: 'Installation Cost Parameters' },
+  'solar-installation-cost-calculator': { visibleFields: ['solarArraySizeKW', 'rate', 'costPerWatt', 'includeTaxCredit'], title: 'Installation Cost Parameters' },
   'solar-investment-return-calculator': { visibleFields: ['bill', 'rate', 'solarArraySizeKW'], defaultFixedMode: 'bill', title: 'Investment Parameters' },
   'solar-battery-size-calculator': { visibleFields: ['backupLoadW', 'backupDurationHours', 'batteryVoltageV', 'depthOfDischarge'], title: 'Battery Sizing Parameters' },
   'solar-battery-backup-calculator': { visibleFields: ['backupLoadW', 'backupDurationHours', 'stateOfCharge'], title: 'Backup Power Parameters' },
@@ -77,7 +80,8 @@ export function SharedCalculator({
   fixedMode,
   initialInputs
 }: SharedCalculatorProps) {
-  const schema = CALCULATOR_SCHEMAS[calculatorId];
+  const baseId = calculatorId.replace(/-(usa|india)$/, '');
+  const schema = CALCULATOR_SCHEMAS[calculatorId] || CALCULATOR_SCHEMAS[baseId];
   const isHidden = (field: string) => {
     if (hiddenFields.includes(field)) return true;
     if (schema && schema.visibleFields) {
@@ -90,11 +94,13 @@ export function SharedCalculator({
   const calculateFn = useServerFn(calculateSolarSystem);
   const trackFn = useServerFn(trackConversion);
   
-  const [mode, setMode] = useState<'bill' | 'usage'>(fixedMode || initialMode);
+  const [mode, setMode] = useState<'bill' | 'usage' | 'size'>(fixedMode || initialMode);
   const [calcLevel, setCalcLevel] = useState<'simple' | 'advanced'>('simple');
   const [bill, setBill] = useState<number>(initialInputs?.monthlyBill || 150);
   const [usage, setUsage] = useState<number>(initialInputs?.monthlyUsageKWh || 450);
   const [rate, setRate] = useState<number>(initialInputs?.tariffPerKWh || country.defaultElectricityRate);
+  const [costPerWatt, setCostPerWatt] = useState<number>(initialInputs?.costPerWatt || (country.code === 'IN' ? 65 : 3.0));
+  const [includeTaxCredit, setIncludeTaxCredit] = useState<boolean>(initialInputs?.includeTaxCredit !== undefined ? initialInputs.includeTaxCredit : true);
   const [targetOffset, setTargetOffset] = useState<number>(initialInputs?.targetOffset || 100);
   
   const [sunHours, setSunHours] = useState<number>(initialInputs?.peakSunHours || country.defaultPeakSunHours);
@@ -136,6 +142,13 @@ export function SharedCalculator({
     const resource = getSolarResource(country.code, region?.code);
     setSunHours(resource.peakSunHours);
     setPr(resource.performanceRatio);
+
+    const regionalCostW = getSolarCostPerWatt(country.code, region?.code);
+    if (regionalCostW) {
+      setCostPerWatt(regionalCostW);
+    } else {
+      setCostPerWatt(country.code === 'IN' ? 65 : 3.0);
+    }
   }, [country, region]);
 
   const handleCalculate = useCallback(async () => {
@@ -143,6 +156,9 @@ export function SharedCalculator({
       const inputs = {
         monthlyUsageKWh: mode === 'usage' ? usage : undefined,
         monthlyBill: mode === 'bill' ? bill : undefined,
+        systemSizeKW: mode === 'size' ? solarArraySizeKW : undefined,
+        costPerWatt,
+        includeTaxCredit,
         tariffPerKWh: rate,
         peakSunHours: sunHours,
         performanceRatio: pr,
@@ -209,7 +225,7 @@ export function SharedCalculator({
     } catch (error) {
       console.error("Calculation error:", error);
     }
-  }, [mode, usage, bill, rate, sunHours, pr, panelWattage, country.code, region, orientation, shading, tilt, losses, targetOffset, backupLoadW, backupDurationHours, batteryEfficiency, depthOfDischarge, reservePercentage, batteryCapacityKWh, stateOfCharge, inverterEfficiency, batteryVoltageV, calculateFn, onResultsChange, onCalculate]);
+  }, [mode, usage, bill, solarArraySizeKW, costPerWatt, includeTaxCredit, rate, sunHours, pr, panelWattage, country.code, region, orientation, shading, tilt, losses, targetOffset, backupLoadW, backupDurationHours, batteryEfficiency, depthOfDischarge, reservePercentage, batteryCapacityKWh, stateOfCharge, inverterEfficiency, batteryVoltageV, calculateFn, onResultsChange, onCalculate]);
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -335,9 +351,10 @@ export function SharedCalculator({
 
           {!fixedMode ? (
             <Tabs value={mode} onValueChange={(v: any) => setMode(v)} className="w-full">
-              <TabsList className="grid w-full grid-cols-2 mb-6">
+              <TabsList className={`grid w-full ${!isHidden('solarArraySizeKW') ? 'grid-cols-3' : 'grid-cols-2'} mb-6`}>
                 <TabsTrigger value="bill">Monthly Bill</TabsTrigger>
                 <TabsTrigger value="usage">Monthly Usage</TabsTrigger>
+                {!isHidden('solarArraySizeKW') && <TabsTrigger value="size">System Size</TabsTrigger>}
               </TabsList>
               
               <TabsContent value="bill" className="space-y-4">
@@ -367,6 +384,21 @@ export function SharedCalculator({
                   />
                 </div>
               </TabsContent>
+
+              {!isHidden('solarArraySizeKW') && (
+                <TabsContent value="size" className="space-y-4">
+                  <div className="space-y-2">
+                    <Label htmlFor="solarArraySizeKW">Target Solar Array Size (kW DC)</Label>
+                    <Input
+                      id="solarArraySizeKW"
+                      type="number"
+                      step="0.5"
+                      value={solarArraySizeKW}
+                      onChange={(e) => setSolarArraySizeKW(Math.max(0.5, Number(e.target.value)))}
+                    />
+                  </div>
+                </TabsContent>
+              )}
             </Tabs>
           ) : (
             <div className="space-y-4">
@@ -696,6 +728,34 @@ export function SharedCalculator({
                   value={sunHours}
                   onChange={(e) => setSunHours(Math.max(0.1, Number(e.target.value)))}
                 />
+              </div>
+            )}
+
+            {!isHidden('costPerWatt') && (
+              <div className="space-y-2">
+                <Label htmlFor="costPerWatt">Est. Cost per Watt ({country.currencySymbol}/W)</Label>
+                <Input
+                  id="costPerWatt"
+                  type="number"
+                  step="0.10"
+                  value={costPerWatt}
+                  onChange={(e) => setCostPerWatt(Math.max(0.01, Number(e.target.value)))}
+                />
+              </div>
+            )}
+
+            {!isHidden('includeTaxCredit') && country.code === 'US' && (
+              <div className="space-y-2 md:col-span-2 pt-2">
+                <div className="flex items-center justify-between p-3.5 bg-emerald-50 border border-emerald-200 rounded-lg">
+                  <div className="space-y-0.5">
+                    <Label className="text-sm font-semibold text-emerald-950">Include 30% Federal Solar Tax Credit (ITC)</Label>
+                    <p className="text-xs text-emerald-700">Applies 30% tax credit to overall system installation cost</p>
+                  </div>
+                  <Switch 
+                    checked={includeTaxCredit} 
+                    onCheckedChange={(checked) => setIncludeTaxCredit(checked)} 
+                  />
+                </div>
               </div>
             )}
           </div>

@@ -1,5 +1,6 @@
 import { supabase } from "@/integrations/supabase/client";
 import { solarConfig } from "../solar-config";
+import { getSolarCostPerWatt } from "../data/solar-pricing";
 
 export interface MonthlyGeneration {
   month: string;
@@ -26,6 +27,25 @@ export interface SystemInput {
   soilingLosses?: number | undefined;
   targetOffset?: number | undefined;
   targetSystemSizeKW?: number | undefined;
+  costPerWatt?: number | undefined;
+  includeTaxCredit?: boolean | undefined;
+  taxCreditPct?: number | undefined;
+}
+
+export interface CostDetails {
+  costPerWatt: number;
+  grossCost: number;
+  taxCreditPct: number;
+  taxCreditAmount: number;
+  netCost: number;
+  netCostPerWatt: number;
+  paybackYears: number;
+  lifetimeSavings25Y: number;
+  equipmentCostEst: number;
+  installationCostEst: number;
+  monthlySavings: number;
+  annualSavings: number;
+  currency: string;
 }
 
 export interface SystemResults {
@@ -37,6 +57,7 @@ export interface SystemResults {
   requiredRoofAreaSqFt: number;
   annualSavings: number;
   monthlyBreakdown: { month: string; generation: number; consumption: number }[];
+  costDetails?: CostDetails;
   dataSourceInfo?: {
     locationSource: string;
     rateSource: string;
@@ -142,6 +163,44 @@ export async function calculateSystemSize(input: SystemInput): Promise<SystemRes
     };
   });
 
+  const countryCode = input.countryCode || 'US';
+  const defaultCostW = getSolarCostPerWatt(countryCode, input.regionCode) || (countryCode === 'IN' ? 65 : 3.0);
+  const costPerWatt = input.costPerWatt && input.costPerWatt > 0 ? input.costPerWatt : defaultCostW;
+  
+  const taxCreditPct = input.taxCreditPct !== undefined ? input.taxCreditPct : (countryCode === 'US' && input.includeTaxCredit !== false ? 30 : 0);
+  const grossCost = Math.round(actualSystemSizeKW * 1000 * costPerWatt);
+  const taxCreditAmount = Math.round((grossCost * taxCreditPct) / 100);
+  const netCost = Math.max(0, grossCost - taxCreditAmount);
+  const netCostPerWatt = (actualSystemSizeKW * 1000) > 0 ? Number((netCost / (actualSystemSizeKW * 1000)).toFixed(2)) : 0;
+  
+  const paybackYears = annualSavings > 0 ? Number((netCost / annualSavings).toFixed(1)) : 0;
+  
+  let total25YGenSavings = 0;
+  let currentRate = tariff;
+  let currentGen = annualGeneration;
+  for (let y = 1; y <= 25; y++) {
+    total25YGenSavings += currentGen * currentRate;
+    currentGen *= 0.995;
+    currentRate *= 1.025;
+  }
+  const lifetimeSavings25Y = Number(Math.max(0, total25YGenSavings - netCost).toFixed(0));
+
+  const costDetails: CostDetails = {
+    costPerWatt,
+    grossCost,
+    taxCreditPct,
+    taxCreditAmount,
+    netCost,
+    netCostPerWatt,
+    paybackYears,
+    lifetimeSavings25Y,
+    equipmentCostEst: Math.round(grossCost * 0.65),
+    installationCostEst: Math.round(grossCost * 0.35),
+    monthlySavings: Number((annualSavings / 12).toFixed(0)),
+    annualSavings: Number(annualSavings.toFixed(0)),
+    currency: countryCode === 'IN' ? 'INR' : countryCode === 'UK' ? 'GBP' : countryCode === 'DE' ? 'EUR' : countryCode === 'AU' ? 'AUD' : 'USD',
+  };
+
   return {
     requiredSystemSizeKW: Number(actualSystemSizeKW.toFixed(2)),
     panelCount,
@@ -151,6 +210,7 @@ export async function calculateSystemSize(input: SystemInput): Promise<SystemRes
     requiredRoofAreaSqFt: Number(roofArea.toFixed(0)),
     annualSavings: Number(annualSavings.toFixed(0)),
     monthlyBreakdown,
+    costDetails,
     dataSourceInfo: sourceInfo
   };
 }

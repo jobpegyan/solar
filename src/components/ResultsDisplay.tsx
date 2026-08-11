@@ -3,7 +3,7 @@ import { useSolarSettings } from '@/lib/location/location-context';
 import { formatCurrency, formatEnergy } from '@/lib/utils/formatters';
 import { formatArea } from '@/lib/units/unit-utils';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
-import { Zap, Sun, Maximize, TrendingUp, MapPin, Share2, Printer, Calendar, Info, Bookmark, FileText, LayoutGrid } from 'lucide-react';
+import { Zap, Sun, Maximize, TrendingUp, MapPin, Share2, Printer, Calendar, Info, Bookmark, FileText, LayoutGrid, DollarSign, PiggyBank, ShieldCheck, Clock, Sparkles, CheckCircle2 } from 'lucide-react';
 import { CalculationDetails } from './CalculationDetails';
 const SolarChart = React.lazy(() => import('./SolarChart').then(mod => ({ default: mod.SolarChart })));
 import { Button } from './ui/button';
@@ -76,8 +76,11 @@ export function ResultsDisplay({ results }: ResultsDisplayProps) {
     panelWattage,
     locationName,
     rate,
-    sunHours
+    sunHours,
+    costDetails
   } = results;
+
+  const activeCurrency = costDetails?.currency || results.currency || currency;
 
   return (
     <div className="space-y-6 print:space-y-4">
@@ -102,6 +105,99 @@ export function ResultsDisplay({ results }: ResultsDisplayProps) {
           </Button>
         </div>
       </div>
+
+      {costDetails && (
+        <Card className="overflow-hidden border-2 border-emerald-500/30 bg-gradient-to-br from-emerald-50/50 via-white to-slate-50 shadow-xl">
+          <CardHeader className="bg-emerald-500/10 border-b border-emerald-500/20">
+            <div className="flex flex-col md:flex-row md:items-center justify-between gap-2">
+              <div>
+                <CardTitle className="text-2xl flex items-center gap-2 text-emerald-950">
+                  <DollarSign className="w-6 h-6 text-emerald-600" />
+                  Estimated Solar System Cost & Investment
+                </CardTitle>
+                <CardDescription className="text-emerald-800/80">
+                  Financial breakdown including equipment, installation, and incentives.
+                </CardDescription>
+              </div>
+              {costDetails.taxCreditPct > 0 && (
+                <div className="inline-flex items-center gap-1.5 px-3 py-1 bg-emerald-600 text-white rounded-full text-xs font-bold shadow-sm">
+                  <Sparkles className="w-3.5 h-3.5" />
+                  {costDetails.taxCreditPct}% Federal Tax Credit Applied
+                </div>
+              )}
+            </div>
+          </CardHeader>
+          <CardContent className="pt-6 space-y-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
+              <div className="p-5 bg-emerald-600 text-white rounded-2xl shadow-md border border-emerald-500">
+                <p className="text-xs uppercase font-bold tracking-wider text-emerald-100 mb-1">Net System Cost</p>
+                <div className="text-3xl font-extrabold">{formatCurrency(costDetails.netCost, activeCurrency)}</div>
+                <p className="text-[11px] text-emerald-100 mt-1">
+                  {costDetails.taxCreditPct > 0 ? `After ${costDetails.taxCreditPct}% tax credit` : 'Net out-of-pocket'}
+                </p>
+              </div>
+
+              <div className="p-5 bg-white border border-slate-200 rounded-2xl shadow-sm">
+                <p className="text-xs uppercase font-bold tracking-wider text-muted-foreground mb-1">Gross System Cost</p>
+                <div className="text-2xl font-bold text-slate-900">{formatCurrency(costDetails.grossCost, activeCurrency)}</div>
+                <p className="text-[11px] text-muted-foreground mt-1">
+                  @ {formatCurrency(costDetails.costPerWatt, activeCurrency)}/Watt gross
+                </p>
+              </div>
+
+              <div className="p-5 bg-emerald-50/80 border border-emerald-200 rounded-2xl shadow-sm">
+                <p className="text-xs uppercase font-bold tracking-wider text-emerald-800 mb-1">Tax Savings (ITC)</p>
+                <div className="text-2xl font-bold text-emerald-700">-{formatCurrency(costDetails.taxCreditAmount, activeCurrency)}</div>
+                <p className="text-[11px] text-emerald-600 mt-1">Direct tax reduction</p>
+              </div>
+
+              <div className="p-5 bg-white border border-slate-200 rounded-2xl shadow-sm">
+                <p className="text-xs uppercase font-bold tracking-wider text-muted-foreground mb-1">Payback Period</p>
+                <div className="text-2xl font-bold text-slate-900">{costDetails.paybackYears} <span className="text-base font-normal text-slate-600">Years</span></div>
+                <p className="text-[11px] text-muted-foreground mt-1">Est. break-even time</p>
+              </div>
+            </div>
+
+            <div className="p-5 bg-white border border-slate-200 rounded-2xl shadow-sm space-y-4">
+              <h4 className="text-sm font-bold text-slate-900 uppercase tracking-wider flex items-center gap-2">
+                <PiggyBank className="w-4 h-4 text-emerald-600" />
+                Cost Breakdown & 25-Year Value
+              </h4>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+                <div className="space-y-2 border-r pr-0 md:pr-4">
+                  <div className="flex justify-between py-1.5 border-b">
+                    <span className="text-slate-600">Equipment (Panels, Inverter, Racking)</span>
+                    <span className="font-semibold">{formatCurrency(costDetails.equipmentCostEst, activeCurrency)}</span>
+                  </div>
+                  <div className="flex justify-between py-1.5 border-b">
+                    <span className="text-slate-600">Installation, Labor & Permitting</span>
+                    <span className="font-semibold">{formatCurrency(costDetails.installationCostEst, activeCurrency)}</span>
+                  </div>
+                  <div className="flex justify-between py-1.5 text-emerald-700 font-medium">
+                    <span>Federal Solar Tax Credit ({costDetails.taxCreditPct}%)</span>
+                    <span>-{formatCurrency(costDetails.taxCreditAmount, activeCurrency)}</span>
+                  </div>
+                </div>
+
+                <div className="space-y-2">
+                  <div className="flex justify-between py-1.5 border-b">
+                    <span className="text-slate-600">Effective Net Cost per Watt</span>
+                    <span className="font-semibold">{formatCurrency(costDetails.netCostPerWatt, activeCurrency)}/W</span>
+                  </div>
+                  <div className="flex justify-between py-1.5 border-b">
+                    <span className="text-slate-600">Monthly Bill Savings</span>
+                    <span className="font-semibold text-solar">{formatCurrency(costDetails.monthlySavings, activeCurrency)}/mo</span>
+                  </div>
+                  <div className="flex justify-between py-1.5 text-emerald-800 font-bold">
+                    <span>Est. 25-Year Net Savings</span>
+                    <span>{formatCurrency(costDetails.lifetimeSavings25Y, activeCurrency)}</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+      )}
 
       <Card className="overflow-hidden border-2 border-solar print:border-slate-200 shadow-lg">
         <CardHeader className="bg-solar/5 border-b border-solar/10 print:bg-white">
