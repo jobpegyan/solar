@@ -102,7 +102,7 @@ function AdminCalculatorsList() {
           <p className="text-slate-500">Manage all solar calculators and their configuration.</p>
         </div>
         <Button asChild>
-          <Link to="/admin/calculators/new">
+          <Link to={"/admin/calculators/new" as any}>
             <Plus className="w-4 h-4 mr-2" /> New Calculator
           </Link>
         </Button>
@@ -199,7 +199,7 @@ function AdminCalculatorsList() {
                       <DropdownMenuContent align="end" className="w-48">
                         <DropdownMenuLabel>Actions</DropdownMenuLabel>
                         <DropdownMenuItem asChild>
-                          <Link to={`/admin/calculators/${calc.id}`} className="flex items-center">
+                          <Link to={`/admin/calculators/${calc.id}` as any} className="flex items-center">
                             <Edit className="w-4 h-4 mr-2" /> Edit Configuration
                           </Link>
                         </DropdownMenuItem>

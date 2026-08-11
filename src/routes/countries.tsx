@@ -64,7 +64,7 @@ function CountriesDirectory() {
                       
                       <div className="pt-4 border-t space-y-2">
                         <Link 
-                          to="/solar-calculator/world" 
+                          to={"/solar-calculator/world" as any} 
                           className="text-sm font-medium flex items-center justify-between group-hover:text-solar"
                         >
                           Solar Calculator

@@ -158,7 +158,7 @@ function ComparisonDashboard() {
                          </div>
                        </div>
                        <Button variant="outline" size="sm" className="w-full mt-4" asChild>
-                         <Link to={`/dashboard/calculations/${calc.id}`}>Full Details</Link>
+                         <Link to={`/dashboard/calculations/${calc.id}` as any}>Full Details</Link>
                        </Button>
                      </CardContent>
                    </Card>
