@@ -8,7 +8,7 @@ const searchSchema = z.object({
   systemSize: z.string().optional(),
 });
 
-export const Route = createFileRoute('/solar-payback-period-calculator')({
+export const Route = createFileRoute('/solar-payback-period-calculator/')({
   validateSearch: (search) => searchSchema.parse(search),
   head: () => {
     const seo = getSEOData('solar-payback-period-calculator');

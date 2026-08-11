@@ -53,18 +53,15 @@ import { Route as SolarInvestmentReturnCalculatorRouteImport } from './routes/so
 import { Route as SolarIrradianceCalculatorRouteImport } from './routes/solar-irradiance-calculator'
 import { Route as SolarPanelAngleCalculatorRouteImport } from './routes/solar-panel-angle-calculator'
 import { Route as SolarPanelCalculatorRouteImport } from './routes/solar-panel-calculator'
-import { Route as SolarPanelCostCalculatorRouteImport } from './routes/solar-panel-cost-calculator'
 import { Route as SolarPanelOutputCalculatorRouteImport } from './routes/solar-panel-output-calculator'
 import { Route as SolarPanelRequirementCalculatorRouteImport } from './routes/solar-panel-requirement-calculator'
 import { Route as SolarPanelRoiCalculatorRouteImport } from './routes/solar-panel-roi-calculator'
-import { Route as SolarPanelSavingsCalculatorRouteImport } from './routes/solar-panel-savings-calculator'
 import { Route as SolarPanelSizeCalculatorRouteImport } from './routes/solar-panel-size-calculator'
 import { Route as SolarPanelSpaceCalculatorRouteImport } from './routes/solar-panel-space-calculator'
 import { Route as SolarPanelWattageCalculatorRouteImport } from './routes/solar-panel-wattage-calculator'
 import { Route as SolarPanelsForHouseCalculatorRouteImport } from './routes/solar-panels-for-house-calculator'
 import { Route as SolarPanelsNeededCalculatorRouteImport } from './routes/solar-panels-needed-calculator'
 import { Route as SolarPaybackCalculatorRouteImport } from './routes/solar-payback-calculator'
-import { Route as SolarPaybackPeriodCalculatorRouteImport } from './routes/solar-payback-period-calculator'
 import { Route as SolarQuoteRouteImport } from './routes/solar-quote'
 import { Route as SolarRoiCalculatorRouteImport } from './routes/solar-roi-calculator'
 import { Route as SolarRoofAreaCalculatorRouteImport } from './routes/solar-roof-area-calculator'
@@ -126,10 +123,13 @@ import { Route as SolarIncentivesUsaRouteImport } from './routes/solar-incentive
 import { Route as SolarPanelCalculatorIndiaRouteImport } from './routes/solar-panel-calculator.india'
 import { Route as SolarPanelCalculatorUsaRouteImport } from './routes/solar-panel-calculator.usa'
 import { Route as SolarPanelCalculatorWorldRouteImport } from './routes/solar-panel-calculator.world'
+import { Route as SolarPanelCostCalculatorIndexRouteImport } from './routes/solar-panel-cost-calculator/index'
 import { Route as SolarPanelCostCalculatorIndiaRouteImport } from './routes/solar-panel-cost-calculator/india'
 import { Route as SolarPanelCostCalculatorUsaRouteImport } from './routes/solar-panel-cost-calculator/usa'
+import { Route as SolarPanelSavingsCalculatorIndexRouteImport } from './routes/solar-panel-savings-calculator/index'
 import { Route as SolarPanelSavingsCalculatorIndiaRouteImport } from './routes/solar-panel-savings-calculator/india'
 import { Route as SolarPanelSavingsCalculatorUsaRouteImport } from './routes/solar-panel-savings-calculator/usa'
+import { Route as SolarPaybackPeriodCalculatorIndexRouteImport } from './routes/solar-payback-period-calculator/index'
 import { Route as SolarPaybackPeriodCalculatorIndiaRouteImport } from './routes/solar-payback-period-calculator/india'
 import { Route as SolarPaybackPeriodCalculatorUsaRouteImport } from './routes/solar-payback-period-calculator/usa'
 import { Route as AuthenticatedDashboardComparisonRouteImport } from './routes/_authenticated/dashboard/comparison'
@@ -387,12 +387,6 @@ const SolarPanelCalculatorRoute = SolarPanelCalculatorRouteImport.update({
   path: '/solar-panel-calculator',
   getParentRoute: () => rootRouteImport,
 } as any)
-const SolarPanelCostCalculatorRoute =
-  SolarPanelCostCalculatorRouteImport.update({
-    id: '/solar-panel-cost-calculator',
-    path: '/solar-panel-cost-calculator',
-    getParentRoute: () => rootRouteImport,
-  } as any)
 const SolarPanelOutputCalculatorRoute =
   SolarPanelOutputCalculatorRouteImport.update({
     id: '/solar-panel-output-calculator',
@@ -410,12 +404,6 @@ const SolarPanelRoiCalculatorRoute = SolarPanelRoiCalculatorRouteImport.update({
   path: '/solar-panel-roi-calculator',
   getParentRoute: () => rootRouteImport,
 } as any)
-const SolarPanelSavingsCalculatorRoute =
-  SolarPanelSavingsCalculatorRouteImport.update({
-    id: '/solar-panel-savings-calculator',
-    path: '/solar-panel-savings-calculator',
-    getParentRoute: () => rootRouteImport,
-  } as any)
 const SolarPanelSizeCalculatorRoute =
   SolarPanelSizeCalculatorRouteImport.update({
     id: '/solar-panel-size-calculator',
@@ -451,12 +439,6 @@ const SolarPaybackCalculatorRoute = SolarPaybackCalculatorRouteImport.update({
   path: '/solar-payback-calculator',
   getParentRoute: () => rootRouteImport,
 } as any)
-const SolarPaybackPeriodCalculatorRoute =
-  SolarPaybackPeriodCalculatorRouteImport.update({
-    id: '/solar-payback-period-calculator',
-    path: '/solar-payback-period-calculator',
-    getParentRoute: () => rootRouteImport,
-  } as any)
 const SolarQuoteRoute = SolarQuoteRouteImport.update({
   id: '/solar-quote',
   path: '/solar-quote',
@@ -772,41 +754,59 @@ const SolarPanelCalculatorWorldRoute =
     path: '/world',
     getParentRoute: () => SolarPanelCalculatorRoute,
   } as any)
+const SolarPanelCostCalculatorIndexRoute =
+  SolarPanelCostCalculatorIndexRouteImport.update({
+    id: '/solar-panel-cost-calculator/',
+    path: '/solar-panel-cost-calculator/',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const SolarPanelCostCalculatorIndiaRoute =
   SolarPanelCostCalculatorIndiaRouteImport.update({
-    id: '/india',
-    path: '/india',
-    getParentRoute: () => SolarPanelCostCalculatorRoute,
+    id: '/solar-panel-cost-calculator/india',
+    path: '/solar-panel-cost-calculator/india',
+    getParentRoute: () => rootRouteImport,
   } as any)
 const SolarPanelCostCalculatorUsaRoute =
   SolarPanelCostCalculatorUsaRouteImport.update({
-    id: '/usa',
-    path: '/usa',
-    getParentRoute: () => SolarPanelCostCalculatorRoute,
+    id: '/solar-panel-cost-calculator/usa',
+    path: '/solar-panel-cost-calculator/usa',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const SolarPanelSavingsCalculatorIndexRoute =
+  SolarPanelSavingsCalculatorIndexRouteImport.update({
+    id: '/solar-panel-savings-calculator/',
+    path: '/solar-panel-savings-calculator/',
+    getParentRoute: () => rootRouteImport,
   } as any)
 const SolarPanelSavingsCalculatorIndiaRoute =
   SolarPanelSavingsCalculatorIndiaRouteImport.update({
-    id: '/india',
-    path: '/india',
-    getParentRoute: () => SolarPanelSavingsCalculatorRoute,
+    id: '/solar-panel-savings-calculator/india',
+    path: '/solar-panel-savings-calculator/india',
+    getParentRoute: () => rootRouteImport,
   } as any)
 const SolarPanelSavingsCalculatorUsaRoute =
   SolarPanelSavingsCalculatorUsaRouteImport.update({
-    id: '/usa',
-    path: '/usa',
-    getParentRoute: () => SolarPanelSavingsCalculatorRoute,
+    id: '/solar-panel-savings-calculator/usa',
+    path: '/solar-panel-savings-calculator/usa',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const SolarPaybackPeriodCalculatorIndexRoute =
+  SolarPaybackPeriodCalculatorIndexRouteImport.update({
+    id: '/solar-payback-period-calculator/',
+    path: '/solar-payback-period-calculator/',
+    getParentRoute: () => rootRouteImport,
   } as any)
 const SolarPaybackPeriodCalculatorIndiaRoute =
   SolarPaybackPeriodCalculatorIndiaRouteImport.update({
-    id: '/india',
-    path: '/india',
-    getParentRoute: () => SolarPaybackPeriodCalculatorRoute,
+    id: '/solar-payback-period-calculator/india',
+    path: '/solar-payback-period-calculator/india',
+    getParentRoute: () => rootRouteImport,
   } as any)
 const SolarPaybackPeriodCalculatorUsaRoute =
   SolarPaybackPeriodCalculatorUsaRouteImport.update({
-    id: '/usa',
-    path: '/usa',
-    getParentRoute: () => SolarPaybackPeriodCalculatorRoute,
+    id: '/solar-payback-period-calculator/usa',
+    path: '/solar-payback-period-calculator/usa',
+    getParentRoute: () => rootRouteImport,
   } as any)
 const AuthenticatedDashboardComparisonRoute =
   AuthenticatedDashboardComparisonRouteImport.update({
@@ -924,18 +924,15 @@ export interface FileRoutesByFullPath {
   '/solar-irradiance-calculator': typeof SolarIrradianceCalculatorRoute
   '/solar-panel-angle-calculator': typeof SolarPanelAngleCalculatorRoute
   '/solar-panel-calculator': typeof SolarPanelCalculatorRouteWithChildren
-  '/solar-panel-cost-calculator': typeof SolarPanelCostCalculatorRouteWithChildren
   '/solar-panel-output-calculator': typeof SolarPanelOutputCalculatorRoute
   '/solar-panel-requirement-calculator': typeof SolarPanelRequirementCalculatorRoute
   '/solar-panel-roi-calculator': typeof SolarPanelRoiCalculatorRoute
-  '/solar-panel-savings-calculator': typeof SolarPanelSavingsCalculatorRouteWithChildren
   '/solar-panel-size-calculator': typeof SolarPanelSizeCalculatorRoute
   '/solar-panel-space-calculator': typeof SolarPanelSpaceCalculatorRoute
   '/solar-panel-wattage-calculator': typeof SolarPanelWattageCalculatorRoute
   '/solar-panels-for-house-calculator': typeof SolarPanelsForHouseCalculatorRoute
   '/solar-panels-needed-calculator': typeof SolarPanelsNeededCalculatorRoute
   '/solar-payback-calculator': typeof SolarPaybackCalculatorRoute
-  '/solar-payback-period-calculator': typeof SolarPaybackPeriodCalculatorRouteWithChildren
   '/solar-quote': typeof SolarQuoteRoute
   '/solar-roi-calculator': typeof SolarRoiCalculatorRoute
   '/solar-roof-area-calculator': typeof SolarRoofAreaCalculatorRoute
@@ -1003,6 +1000,9 @@ export interface FileRoutesByFullPath {
   '/dashboard/': typeof DashboardIndexRoute
   '/guides/': typeof GuidesIndexRoute
   '/solar-incentives/': typeof SolarIncentivesIndexRoute
+  '/solar-panel-cost-calculator/': typeof SolarPanelCostCalculatorIndexRoute
+  '/solar-panel-savings-calculator/': typeof SolarPanelSavingsCalculatorIndexRoute
+  '/solar-payback-period-calculator/': typeof SolarPaybackPeriodCalculatorIndexRoute
   '/dashboard/comparison': typeof AuthenticatedDashboardComparisonRoute
   '/admin/calculators/$id': typeof AdminCalculatorsIdRoute
   '/admin/guides/$id': typeof AdminGuidesIdRoute
@@ -1061,18 +1061,15 @@ export interface FileRoutesByTo {
   '/solar-irradiance-calculator': typeof SolarIrradianceCalculatorRoute
   '/solar-panel-angle-calculator': typeof SolarPanelAngleCalculatorRoute
   '/solar-panel-calculator': typeof SolarPanelCalculatorRouteWithChildren
-  '/solar-panel-cost-calculator': typeof SolarPanelCostCalculatorRouteWithChildren
   '/solar-panel-output-calculator': typeof SolarPanelOutputCalculatorRoute
   '/solar-panel-requirement-calculator': typeof SolarPanelRequirementCalculatorRoute
   '/solar-panel-roi-calculator': typeof SolarPanelRoiCalculatorRoute
-  '/solar-panel-savings-calculator': typeof SolarPanelSavingsCalculatorRouteWithChildren
   '/solar-panel-size-calculator': typeof SolarPanelSizeCalculatorRoute
   '/solar-panel-space-calculator': typeof SolarPanelSpaceCalculatorRoute
   '/solar-panel-wattage-calculator': typeof SolarPanelWattageCalculatorRoute
   '/solar-panels-for-house-calculator': typeof SolarPanelsForHouseCalculatorRoute
   '/solar-panels-needed-calculator': typeof SolarPanelsNeededCalculatorRoute
   '/solar-payback-calculator': typeof SolarPaybackCalculatorRoute
-  '/solar-payback-period-calculator': typeof SolarPaybackPeriodCalculatorRouteWithChildren
   '/solar-quote': typeof SolarQuoteRoute
   '/solar-roi-calculator': typeof SolarRoiCalculatorRoute
   '/solar-roof-area-calculator': typeof SolarRoofAreaCalculatorRoute
@@ -1138,6 +1135,9 @@ export interface FileRoutesByTo {
   '/dashboard': typeof DashboardIndexRoute
   '/guides': typeof GuidesIndexRoute
   '/solar-incentives': typeof SolarIncentivesIndexRoute
+  '/solar-panel-cost-calculator': typeof SolarPanelCostCalculatorIndexRoute
+  '/solar-panel-savings-calculator': typeof SolarPanelSavingsCalculatorIndexRoute
+  '/solar-payback-period-calculator': typeof SolarPaybackPeriodCalculatorIndexRoute
   '/dashboard/comparison': typeof AuthenticatedDashboardComparisonRoute
   '/admin/calculators/$id': typeof AdminCalculatorsIdRoute
   '/admin/guides/$id': typeof AdminGuidesIdRoute
@@ -1197,18 +1197,15 @@ export interface FileRoutesById {
   '/solar-irradiance-calculator': typeof SolarIrradianceCalculatorRoute
   '/solar-panel-angle-calculator': typeof SolarPanelAngleCalculatorRoute
   '/solar-panel-calculator': typeof SolarPanelCalculatorRouteWithChildren
-  '/solar-panel-cost-calculator': typeof SolarPanelCostCalculatorRouteWithChildren
   '/solar-panel-output-calculator': typeof SolarPanelOutputCalculatorRoute
   '/solar-panel-requirement-calculator': typeof SolarPanelRequirementCalculatorRoute
   '/solar-panel-roi-calculator': typeof SolarPanelRoiCalculatorRoute
-  '/solar-panel-savings-calculator': typeof SolarPanelSavingsCalculatorRouteWithChildren
   '/solar-panel-size-calculator': typeof SolarPanelSizeCalculatorRoute
   '/solar-panel-space-calculator': typeof SolarPanelSpaceCalculatorRoute
   '/solar-panel-wattage-calculator': typeof SolarPanelWattageCalculatorRoute
   '/solar-panels-for-house-calculator': typeof SolarPanelsForHouseCalculatorRoute
   '/solar-panels-needed-calculator': typeof SolarPanelsNeededCalculatorRoute
   '/solar-payback-calculator': typeof SolarPaybackCalculatorRoute
-  '/solar-payback-period-calculator': typeof SolarPaybackPeriodCalculatorRouteWithChildren
   '/solar-quote': typeof SolarQuoteRoute
   '/solar-roi-calculator': typeof SolarRoiCalculatorRoute
   '/solar-roof-area-calculator': typeof SolarRoofAreaCalculatorRoute
@@ -1276,6 +1273,9 @@ export interface FileRoutesById {
   '/dashboard/': typeof DashboardIndexRoute
   '/guides/': typeof GuidesIndexRoute
   '/solar-incentives/': typeof SolarIncentivesIndexRoute
+  '/solar-panel-cost-calculator/': typeof SolarPanelCostCalculatorIndexRoute
+  '/solar-panel-savings-calculator/': typeof SolarPanelSavingsCalculatorIndexRoute
+  '/solar-payback-period-calculator/': typeof SolarPaybackPeriodCalculatorIndexRoute
   '/_authenticated/dashboard/comparison': typeof AuthenticatedDashboardComparisonRoute
   '/admin/calculators/$id': typeof AdminCalculatorsIdRoute
   '/admin/guides/$id': typeof AdminGuidesIdRoute
@@ -1337,18 +1337,15 @@ export interface FileRouteTypes {
     | '/solar-irradiance-calculator'
     | '/solar-panel-angle-calculator'
     | '/solar-panel-calculator'
-    | '/solar-panel-cost-calculator'
     | '/solar-panel-output-calculator'
     | '/solar-panel-requirement-calculator'
     | '/solar-panel-roi-calculator'
-    | '/solar-panel-savings-calculator'
     | '/solar-panel-size-calculator'
     | '/solar-panel-space-calculator'
     | '/solar-panel-wattage-calculator'
     | '/solar-panels-for-house-calculator'
     | '/solar-panels-needed-calculator'
     | '/solar-payback-calculator'
-    | '/solar-payback-period-calculator'
     | '/solar-quote'
     | '/solar-roi-calculator'
     | '/solar-roof-area-calculator'
@@ -1416,6 +1413,9 @@ export interface FileRouteTypes {
     | '/dashboard/'
     | '/guides/'
     | '/solar-incentives/'
+    | '/solar-panel-cost-calculator/'
+    | '/solar-panel-savings-calculator/'
+    | '/solar-payback-period-calculator/'
     | '/dashboard/comparison'
     | '/admin/calculators/$id'
     | '/admin/guides/$id'
@@ -1474,18 +1474,15 @@ export interface FileRouteTypes {
     | '/solar-irradiance-calculator'
     | '/solar-panel-angle-calculator'
     | '/solar-panel-calculator'
-    | '/solar-panel-cost-calculator'
     | '/solar-panel-output-calculator'
     | '/solar-panel-requirement-calculator'
     | '/solar-panel-roi-calculator'
-    | '/solar-panel-savings-calculator'
     | '/solar-panel-size-calculator'
     | '/solar-panel-space-calculator'
     | '/solar-panel-wattage-calculator'
     | '/solar-panels-for-house-calculator'
     | '/solar-panels-needed-calculator'
     | '/solar-payback-calculator'
-    | '/solar-payback-period-calculator'
     | '/solar-quote'
     | '/solar-roi-calculator'
     | '/solar-roof-area-calculator'
@@ -1551,6 +1548,9 @@ export interface FileRouteTypes {
     | '/dashboard'
     | '/guides'
     | '/solar-incentives'
+    | '/solar-panel-cost-calculator'
+    | '/solar-panel-savings-calculator'
+    | '/solar-payback-period-calculator'
     | '/dashboard/comparison'
     | '/admin/calculators/$id'
     | '/admin/guides/$id'
@@ -1609,18 +1609,15 @@ export interface FileRouteTypes {
     | '/solar-irradiance-calculator'
     | '/solar-panel-angle-calculator'
     | '/solar-panel-calculator'
-    | '/solar-panel-cost-calculator'
     | '/solar-panel-output-calculator'
     | '/solar-panel-requirement-calculator'
     | '/solar-panel-roi-calculator'
-    | '/solar-panel-savings-calculator'
     | '/solar-panel-size-calculator'
     | '/solar-panel-space-calculator'
     | '/solar-panel-wattage-calculator'
     | '/solar-panels-for-house-calculator'
     | '/solar-panels-needed-calculator'
     | '/solar-payback-calculator'
-    | '/solar-payback-period-calculator'
     | '/solar-quote'
     | '/solar-roi-calculator'
     | '/solar-roof-area-calculator'
@@ -1688,6 +1685,9 @@ export interface FileRouteTypes {
     | '/dashboard/'
     | '/guides/'
     | '/solar-incentives/'
+    | '/solar-panel-cost-calculator/'
+    | '/solar-panel-savings-calculator/'
+    | '/solar-payback-period-calculator/'
     | '/_authenticated/dashboard/comparison'
     | '/admin/calculators/$id'
     | '/admin/guides/$id'
@@ -1748,18 +1748,15 @@ export interface RootRouteChildren {
   SolarIrradianceCalculatorRoute: typeof SolarIrradianceCalculatorRoute
   SolarPanelAngleCalculatorRoute: typeof SolarPanelAngleCalculatorRoute
   SolarPanelCalculatorRoute: typeof SolarPanelCalculatorRouteWithChildren
-  SolarPanelCostCalculatorRoute: typeof SolarPanelCostCalculatorRouteWithChildren
   SolarPanelOutputCalculatorRoute: typeof SolarPanelOutputCalculatorRoute
   SolarPanelRequirementCalculatorRoute: typeof SolarPanelRequirementCalculatorRoute
   SolarPanelRoiCalculatorRoute: typeof SolarPanelRoiCalculatorRoute
-  SolarPanelSavingsCalculatorRoute: typeof SolarPanelSavingsCalculatorRouteWithChildren
   SolarPanelSizeCalculatorRoute: typeof SolarPanelSizeCalculatorRoute
   SolarPanelSpaceCalculatorRoute: typeof SolarPanelSpaceCalculatorRoute
   SolarPanelWattageCalculatorRoute: typeof SolarPanelWattageCalculatorRoute
   SolarPanelsForHouseCalculatorRoute: typeof SolarPanelsForHouseCalculatorRoute
   SolarPanelsNeededCalculatorRoute: typeof SolarPanelsNeededCalculatorRoute
   SolarPaybackCalculatorRoute: typeof SolarPaybackCalculatorRoute
-  SolarPaybackPeriodCalculatorRoute: typeof SolarPaybackPeriodCalculatorRouteWithChildren
   SolarQuoteRoute: typeof SolarQuoteRoute
   SolarRoiCalculatorRoute: typeof SolarRoiCalculatorRoute
   SolarRoofAreaCalculatorRoute: typeof SolarRoofAreaCalculatorRoute
@@ -1792,10 +1789,19 @@ export interface RootRouteChildren {
   SolarCalculatorUsaRoute: typeof SolarCalculatorUsaRouteWithChildren
   SolarIncentivesIndiaRoute: typeof SolarIncentivesIndiaRoute
   SolarIncentivesUsaRoute: typeof SolarIncentivesUsaRoute
+  SolarPanelCostCalculatorIndiaRoute: typeof SolarPanelCostCalculatorIndiaRoute
+  SolarPanelCostCalculatorUsaRoute: typeof SolarPanelCostCalculatorUsaRoute
+  SolarPanelSavingsCalculatorIndiaRoute: typeof SolarPanelSavingsCalculatorIndiaRoute
+  SolarPanelSavingsCalculatorUsaRoute: typeof SolarPanelSavingsCalculatorUsaRoute
+  SolarPaybackPeriodCalculatorIndiaRoute: typeof SolarPaybackPeriodCalculatorIndiaRoute
+  SolarPaybackPeriodCalculatorUsaRoute: typeof SolarPaybackPeriodCalculatorUsaRoute
   CalculatorsIndexRoute: typeof CalculatorsIndexRoute
   DashboardIndexRoute: typeof DashboardIndexRoute
   GuidesIndexRoute: typeof GuidesIndexRoute
   SolarIncentivesIndexRoute: typeof SolarIncentivesIndexRoute
+  SolarPanelCostCalculatorIndexRoute: typeof SolarPanelCostCalculatorIndexRoute
+  SolarPanelSavingsCalculatorIndexRoute: typeof SolarPanelSavingsCalculatorIndexRoute
+  SolarPaybackPeriodCalculatorIndexRoute: typeof SolarPaybackPeriodCalculatorIndexRoute
   AuthenticatedDashboardComparisonRoute: typeof AuthenticatedDashboardComparisonRoute
   ApiPublicSitemapRoute: typeof ApiPublicSitemapRoute
   DashboardReportIdRoute: typeof DashboardReportIdRoute
@@ -2113,13 +2119,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SolarPanelCalculatorRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/solar-panel-cost-calculator': {
-      id: '/solar-panel-cost-calculator'
-      path: '/solar-panel-cost-calculator'
-      fullPath: '/solar-panel-cost-calculator'
-      preLoaderRoute: typeof SolarPanelCostCalculatorRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/solar-panel-output-calculator': {
       id: '/solar-panel-output-calculator'
       path: '/solar-panel-output-calculator'
@@ -2139,13 +2138,6 @@ declare module '@tanstack/react-router' {
       path: '/solar-panel-roi-calculator'
       fullPath: '/solar-panel-roi-calculator'
       preLoaderRoute: typeof SolarPanelRoiCalculatorRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/solar-panel-savings-calculator': {
-      id: '/solar-panel-savings-calculator'
-      path: '/solar-panel-savings-calculator'
-      fullPath: '/solar-panel-savings-calculator'
-      preLoaderRoute: typeof SolarPanelSavingsCalculatorRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/solar-panel-size-calculator': {
@@ -2188,13 +2180,6 @@ declare module '@tanstack/react-router' {
       path: '/solar-payback-calculator'
       fullPath: '/solar-payback-calculator'
       preLoaderRoute: typeof SolarPaybackCalculatorRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/solar-payback-period-calculator': {
-      id: '/solar-payback-period-calculator'
-      path: '/solar-payback-period-calculator'
-      fullPath: '/solar-payback-period-calculator'
-      preLoaderRoute: typeof SolarPaybackPeriodCalculatorRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/solar-quote': {
@@ -2624,47 +2609,68 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SolarPanelCalculatorWorldRouteImport
       parentRoute: typeof SolarPanelCalculatorRoute
     }
+    '/solar-panel-cost-calculator/': {
+      id: '/solar-panel-cost-calculator/'
+      path: '/solar-panel-cost-calculator'
+      fullPath: '/solar-panel-cost-calculator/'
+      preLoaderRoute: typeof SolarPanelCostCalculatorIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/solar-panel-cost-calculator/india': {
       id: '/solar-panel-cost-calculator/india'
-      path: '/india'
+      path: '/solar-panel-cost-calculator/india'
       fullPath: '/solar-panel-cost-calculator/india'
       preLoaderRoute: typeof SolarPanelCostCalculatorIndiaRouteImport
-      parentRoute: typeof SolarPanelCostCalculatorRoute
+      parentRoute: typeof rootRouteImport
     }
     '/solar-panel-cost-calculator/usa': {
       id: '/solar-panel-cost-calculator/usa'
-      path: '/usa'
+      path: '/solar-panel-cost-calculator/usa'
       fullPath: '/solar-panel-cost-calculator/usa'
       preLoaderRoute: typeof SolarPanelCostCalculatorUsaRouteImport
-      parentRoute: typeof SolarPanelCostCalculatorRoute
+      parentRoute: typeof rootRouteImport
+    }
+    '/solar-panel-savings-calculator/': {
+      id: '/solar-panel-savings-calculator/'
+      path: '/solar-panel-savings-calculator'
+      fullPath: '/solar-panel-savings-calculator/'
+      preLoaderRoute: typeof SolarPanelSavingsCalculatorIndexRouteImport
+      parentRoute: typeof rootRouteImport
     }
     '/solar-panel-savings-calculator/india': {
       id: '/solar-panel-savings-calculator/india'
-      path: '/india'
+      path: '/solar-panel-savings-calculator/india'
       fullPath: '/solar-panel-savings-calculator/india'
       preLoaderRoute: typeof SolarPanelSavingsCalculatorIndiaRouteImport
-      parentRoute: typeof SolarPanelSavingsCalculatorRoute
+      parentRoute: typeof rootRouteImport
     }
     '/solar-panel-savings-calculator/usa': {
       id: '/solar-panel-savings-calculator/usa'
-      path: '/usa'
+      path: '/solar-panel-savings-calculator/usa'
       fullPath: '/solar-panel-savings-calculator/usa'
       preLoaderRoute: typeof SolarPanelSavingsCalculatorUsaRouteImport
-      parentRoute: typeof SolarPanelSavingsCalculatorRoute
+      parentRoute: typeof rootRouteImport
+    }
+    '/solar-payback-period-calculator/': {
+      id: '/solar-payback-period-calculator/'
+      path: '/solar-payback-period-calculator'
+      fullPath: '/solar-payback-period-calculator/'
+      preLoaderRoute: typeof SolarPaybackPeriodCalculatorIndexRouteImport
+      parentRoute: typeof rootRouteImport
     }
     '/solar-payback-period-calculator/india': {
       id: '/solar-payback-period-calculator/india'
-      path: '/india'
+      path: '/solar-payback-period-calculator/india'
       fullPath: '/solar-payback-period-calculator/india'
       preLoaderRoute: typeof SolarPaybackPeriodCalculatorIndiaRouteImport
-      parentRoute: typeof SolarPaybackPeriodCalculatorRoute
+      parentRoute: typeof rootRouteImport
     }
     '/solar-payback-period-calculator/usa': {
       id: '/solar-payback-period-calculator/usa'
-      path: '/usa'
+      path: '/solar-payback-period-calculator/usa'
       fullPath: '/solar-payback-period-calculator/usa'
       preLoaderRoute: typeof SolarPaybackPeriodCalculatorUsaRouteImport
-      parentRoute: typeof SolarPaybackPeriodCalculatorRoute
+      parentRoute: typeof rootRouteImport
     }
     '/_authenticated/dashboard/comparison': {
       id: '/_authenticated/dashboard/comparison'
@@ -2837,56 +2843,6 @@ const SolarPanelCalculatorRouteChildren: SolarPanelCalculatorRouteChildren = {
 const SolarPanelCalculatorRouteWithChildren =
   SolarPanelCalculatorRoute._addFileChildren(SolarPanelCalculatorRouteChildren)
 
-interface SolarPanelCostCalculatorRouteChildren {
-  SolarPanelCostCalculatorIndiaRoute: typeof SolarPanelCostCalculatorIndiaRoute
-  SolarPanelCostCalculatorUsaRoute: typeof SolarPanelCostCalculatorUsaRoute
-}
-
-const SolarPanelCostCalculatorRouteChildren: SolarPanelCostCalculatorRouteChildren =
-  {
-    SolarPanelCostCalculatorIndiaRoute: SolarPanelCostCalculatorIndiaRoute,
-    SolarPanelCostCalculatorUsaRoute: SolarPanelCostCalculatorUsaRoute,
-  }
-
-const SolarPanelCostCalculatorRouteWithChildren =
-  SolarPanelCostCalculatorRoute._addFileChildren(
-    SolarPanelCostCalculatorRouteChildren,
-  )
-
-interface SolarPanelSavingsCalculatorRouteChildren {
-  SolarPanelSavingsCalculatorIndiaRoute: typeof SolarPanelSavingsCalculatorIndiaRoute
-  SolarPanelSavingsCalculatorUsaRoute: typeof SolarPanelSavingsCalculatorUsaRoute
-}
-
-const SolarPanelSavingsCalculatorRouteChildren: SolarPanelSavingsCalculatorRouteChildren =
-  {
-    SolarPanelSavingsCalculatorIndiaRoute:
-      SolarPanelSavingsCalculatorIndiaRoute,
-    SolarPanelSavingsCalculatorUsaRoute: SolarPanelSavingsCalculatorUsaRoute,
-  }
-
-const SolarPanelSavingsCalculatorRouteWithChildren =
-  SolarPanelSavingsCalculatorRoute._addFileChildren(
-    SolarPanelSavingsCalculatorRouteChildren,
-  )
-
-interface SolarPaybackPeriodCalculatorRouteChildren {
-  SolarPaybackPeriodCalculatorIndiaRoute: typeof SolarPaybackPeriodCalculatorIndiaRoute
-  SolarPaybackPeriodCalculatorUsaRoute: typeof SolarPaybackPeriodCalculatorUsaRoute
-}
-
-const SolarPaybackPeriodCalculatorRouteChildren: SolarPaybackPeriodCalculatorRouteChildren =
-  {
-    SolarPaybackPeriodCalculatorIndiaRoute:
-      SolarPaybackPeriodCalculatorIndiaRoute,
-    SolarPaybackPeriodCalculatorUsaRoute: SolarPaybackPeriodCalculatorUsaRoute,
-  }
-
-const SolarPaybackPeriodCalculatorRouteWithChildren =
-  SolarPaybackPeriodCalculatorRoute._addFileChildren(
-    SolarPaybackPeriodCalculatorRouteChildren,
-  )
-
 interface SolarCalculatorIndiaRouteChildren {
   SolarCalculatorIndiaStateRoute: typeof SolarCalculatorIndiaStateRoute
   SolarCalculatorIndiaIndexRoute: typeof SolarCalculatorIndiaIndexRoute
@@ -2960,20 +2916,15 @@ const rootRouteChildren: RootRouteChildren = {
   SolarIrradianceCalculatorRoute: SolarIrradianceCalculatorRoute,
   SolarPanelAngleCalculatorRoute: SolarPanelAngleCalculatorRoute,
   SolarPanelCalculatorRoute: SolarPanelCalculatorRouteWithChildren,
-  SolarPanelCostCalculatorRoute: SolarPanelCostCalculatorRouteWithChildren,
   SolarPanelOutputCalculatorRoute: SolarPanelOutputCalculatorRoute,
   SolarPanelRequirementCalculatorRoute: SolarPanelRequirementCalculatorRoute,
   SolarPanelRoiCalculatorRoute: SolarPanelRoiCalculatorRoute,
-  SolarPanelSavingsCalculatorRoute:
-    SolarPanelSavingsCalculatorRouteWithChildren,
   SolarPanelSizeCalculatorRoute: SolarPanelSizeCalculatorRoute,
   SolarPanelSpaceCalculatorRoute: SolarPanelSpaceCalculatorRoute,
   SolarPanelWattageCalculatorRoute: SolarPanelWattageCalculatorRoute,
   SolarPanelsForHouseCalculatorRoute: SolarPanelsForHouseCalculatorRoute,
   SolarPanelsNeededCalculatorRoute: SolarPanelsNeededCalculatorRoute,
   SolarPaybackCalculatorRoute: SolarPaybackCalculatorRoute,
-  SolarPaybackPeriodCalculatorRoute:
-    SolarPaybackPeriodCalculatorRouteWithChildren,
   SolarQuoteRoute: SolarQuoteRoute,
   SolarRoiCalculatorRoute: SolarRoiCalculatorRoute,
   SolarRoofAreaCalculatorRoute: SolarRoofAreaCalculatorRoute,
@@ -3006,10 +2957,21 @@ const rootRouteChildren: RootRouteChildren = {
   SolarCalculatorUsaRoute: SolarCalculatorUsaRouteWithChildren,
   SolarIncentivesIndiaRoute: SolarIncentivesIndiaRoute,
   SolarIncentivesUsaRoute: SolarIncentivesUsaRoute,
+  SolarPanelCostCalculatorIndiaRoute: SolarPanelCostCalculatorIndiaRoute,
+  SolarPanelCostCalculatorUsaRoute: SolarPanelCostCalculatorUsaRoute,
+  SolarPanelSavingsCalculatorIndiaRoute: SolarPanelSavingsCalculatorIndiaRoute,
+  SolarPanelSavingsCalculatorUsaRoute: SolarPanelSavingsCalculatorUsaRoute,
+  SolarPaybackPeriodCalculatorIndiaRoute:
+    SolarPaybackPeriodCalculatorIndiaRoute,
+  SolarPaybackPeriodCalculatorUsaRoute: SolarPaybackPeriodCalculatorUsaRoute,
   CalculatorsIndexRoute: CalculatorsIndexRoute,
   DashboardIndexRoute: DashboardIndexRoute,
   GuidesIndexRoute: GuidesIndexRoute,
   SolarIncentivesIndexRoute: SolarIncentivesIndexRoute,
+  SolarPanelCostCalculatorIndexRoute: SolarPanelCostCalculatorIndexRoute,
+  SolarPanelSavingsCalculatorIndexRoute: SolarPanelSavingsCalculatorIndexRoute,
+  SolarPaybackPeriodCalculatorIndexRoute:
+    SolarPaybackPeriodCalculatorIndexRoute,
   AuthenticatedDashboardComparisonRoute: AuthenticatedDashboardComparisonRoute,
   ApiPublicSitemapRoute: ApiPublicSitemapRoute,
   DashboardReportIdRoute: DashboardReportIdRoute,
