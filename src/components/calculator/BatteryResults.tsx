@@ -9,6 +9,8 @@ interface BatteryResultsProps {
 }
 
 export function BatteryResults({ results, type }: BatteryResultsProps) {
+  if (!results) return null;
+
   const formatValue = (val: number, unit: string) => {
     return `${val.toLocaleString(undefined, { maximumFractionDigits: 1 })} ${unit}`;
   };

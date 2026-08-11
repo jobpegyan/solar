@@ -33,6 +33,41 @@ interface SharedCalculatorProps {
   initialInputs?: any;
 }
 
+const CALCULATOR_SCHEMAS: Record<string, { visibleFields?: string[]; title?: string; defaultFixedMode?: 'bill' | 'usage' }> = {
+  'solar-panel-calculator': { title: 'Solar System Parameters' },
+  'solar-panel-size-calculator': { visibleFields: ['usage', 'sunHours', 'panelWattage', 'targetOffset'], defaultFixedMode: 'usage', title: 'Panel Sizing Inputs' },
+  'solar-system-size-calculator': { visibleFields: ['usage', 'rate', 'sunHours', 'panelWattage', 'targetOffset'], defaultFixedMode: 'usage', title: 'System Capacity Parameters' },
+  'solar-panel-output-calculator': { visibleFields: ['solarArraySizeKW', 'sunHours'], title: 'Solar Generation Parameters' },
+  'solar-energy-production-calculator': { visibleFields: ['solarArraySizeKW', 'sunHours'], title: 'Annual Production Parameters' },
+  'solar-panel-savings-calculator': { visibleFields: ['bill', 'rate', 'targetOffset'], defaultFixedMode: 'bill', title: 'Financial Savings Inputs' },
+  'solar-panel-cost-calculator': { visibleFields: ['solarArraySizeKW', 'rate'], title: 'System Cost Parameters' },
+  'solar-panel-roi-calculator': { visibleFields: ['bill', 'rate', 'solarArraySizeKW'], defaultFixedMode: 'bill', title: 'ROI & Return Parameters' },
+  'solar-payback-period-calculator': { visibleFields: ['bill', 'rate', 'solarArraySizeKW'], defaultFixedMode: 'bill', title: 'Payback Inputs' },
+  'solar-bill-savings-calculator': { visibleFields: ['bill', 'rate'], defaultFixedMode: 'bill', title: 'Utility Bill Parameters' },
+  'solar-electricity-cost-calculator': { visibleFields: ['solarArraySizeKW', 'bill', 'rate'], title: 'LCOE Cost Parameters' },
+  'solar-installation-cost-calculator': { visibleFields: ['solarArraySizeKW', 'rate'], title: 'Installation Cost Parameters' },
+  'solar-investment-return-calculator': { visibleFields: ['bill', 'rate', 'solarArraySizeKW'], defaultFixedMode: 'bill', title: 'Investment Parameters' },
+  'solar-battery-size-calculator': { visibleFields: ['backupLoadW', 'backupDurationHours', 'batteryVoltageV', 'depthOfDischarge'], title: 'Battery Sizing Parameters' },
+  'solar-battery-backup-calculator': { visibleFields: ['backupLoadW', 'backupDurationHours', 'stateOfCharge'], title: 'Backup Power Parameters' },
+  'solar-battery-capacity-calculator': { visibleFields: ['batteryCapacityKWh', 'depthOfDischarge', 'batteryEfficiency'], title: 'Capacity Parameters' },
+  'solar-battery-runtime-calculator': { visibleFields: ['batteryCapacityKWh', 'stateOfCharge', 'backupLoadW'], title: 'Runtime Inputs' },
+  'solar-battery-storage-calculator': { visibleFields: ['usage', 'backupDurationHours', 'batteryVoltageV'], defaultFixedMode: 'usage', title: 'Storage Parameters' },
+  'solar-inverter-battery-calculator': { visibleFields: ['backupLoadW', 'batteryVoltageV', 'backupDurationHours'], title: 'Inverter Battery Rating Inputs' },
+  'how-many-solar-panels-do-i-need': { visibleFields: ['usage', 'panelWattage', 'sunHours'], defaultFixedMode: 'usage', title: 'Panel Count Parameters' },
+  'solar-panels-needed-calculator': { visibleFields: ['solarArraySizeKW', 'panelWattage'], title: 'Target Capacity Parameters' },
+  'solar-panels-for-house-calculator': { visibleFields: ['usage', 'panelWattage'], defaultFixedMode: 'usage', title: 'Household Energy Inputs' },
+  'solar-inverter-size-calculator': { visibleFields: ['solarArraySizeKW', 'targetDcAcRatio'], title: 'Inverter Sizing Parameters' },
+  'solar-inverter-capacity-calculator': { visibleFields: ['solarArraySizeKW', 'safetyMargin', 'inverterType'], title: 'Inverter Rating Parameters' },
+  'inverter-load-calculator': { visibleFields: ['runningLoadW', 'peakLoadW', 'safetyMargin'], title: 'Load Wattage Parameters' },
+  'solar-inverter-requirement-calculator': { visibleFields: ['solarArraySizeKW', 'runningLoadW', 'inverterType'], title: 'Inverter Requirement Parameters' },
+  'solar-tilt-angle-calculator': { visibleFields: ['tilt'], title: 'Tilt Parameters' },
+  'solar-panel-angle-calculator': { visibleFields: ['orientation', 'tilt'], title: 'Angle & Direction Parameters' },
+  'solar-irradiance-calculator': { visibleFields: ['sunHours'], title: 'Irradiance Inputs' },
+  'solar-shading-calculator': { visibleFields: ['solarArraySizeKW', 'shading'], title: 'Shading Parameters' },
+  'solar-system-loss-calculator': { visibleFields: ['solarArraySizeKW', 'losses'], title: 'Derate Factor Inputs' },
+  'solar-array-size-calculator': { visibleFields: ['usage', 'sunHours', 'panelWattage'], defaultFixedMode: 'usage', title: 'Array Capacity Inputs' }
+};
+
 export function SharedCalculator({ 
   initialMode = 'bill', 
   calculatorId,
@@ -42,6 +77,15 @@ export function SharedCalculator({
   fixedMode,
   initialInputs
 }: SharedCalculatorProps) {
+  const schema = CALCULATOR_SCHEMAS[calculatorId];
+  const isHidden = (field: string) => {
+    if (hiddenFields.includes(field)) return true;
+    if (schema && schema.visibleFields) {
+      return !schema.visibleFields.includes(field);
+    }
+    return false;
+  };
+
   const { country, region, currency, unitSystem } = useSolarSettings();
   const calculateFn = useServerFn(calculateSolarSystem);
   const trackFn = useServerFn(trackConversion);
@@ -162,51 +206,6 @@ export function SharedCalculator({
     }, 300);
     return () => clearTimeout(timer);
   }, [handleCalculate]);
-
-const CALCULATOR_SCHEMAS: Record<string, { visibleFields?: string[]; title?: string; defaultFixedMode?: 'bill' | 'usage' }> = {
-  'solar-panel-calculator': { title: 'Solar System Parameters' },
-  'solar-panel-size-calculator': { visibleFields: ['usage', 'sunHours', 'panelWattage', 'targetOffset'], defaultFixedMode: 'usage', title: 'Panel Sizing Inputs' },
-  'solar-system-size-calculator': { visibleFields: ['usage', 'rate', 'sunHours', 'panelWattage', 'targetOffset'], defaultFixedMode: 'usage', title: 'System Capacity Parameters' },
-  'solar-panel-output-calculator': { visibleFields: ['solarArraySizeKW', 'sunHours'], title: 'Solar Generation Parameters' },
-  'solar-energy-production-calculator': { visibleFields: ['solarArraySizeKW', 'sunHours'], title: 'Annual Production Parameters' },
-  'solar-panel-savings-calculator': { visibleFields: ['bill', 'rate', 'targetOffset'], defaultFixedMode: 'bill', title: 'Financial Savings Inputs' },
-  'solar-panel-cost-calculator': { visibleFields: ['solarArraySizeKW', 'rate'], title: 'System Cost Parameters' },
-  'solar-panel-roi-calculator': { visibleFields: ['bill', 'rate', 'solarArraySizeKW'], defaultFixedMode: 'bill', title: 'ROI & Return Parameters' },
-  'solar-payback-period-calculator': { visibleFields: ['bill', 'rate', 'solarArraySizeKW'], defaultFixedMode: 'bill', title: 'Payback Inputs' },
-  'solar-bill-savings-calculator': { visibleFields: ['bill', 'rate'], defaultFixedMode: 'bill', title: 'Utility Bill Parameters' },
-  'solar-electricity-cost-calculator': { visibleFields: ['solarArraySizeKW', 'bill', 'rate'], title: 'LCOE Cost Parameters' },
-  'solar-installation-cost-calculator': { visibleFields: ['solarArraySizeKW', 'rate'], title: 'Installation Cost Parameters' },
-  'solar-investment-return-calculator': { visibleFields: ['bill', 'rate', 'solarArraySizeKW'], defaultFixedMode: 'bill', title: 'Investment Parameters' },
-  'solar-battery-size-calculator': { visibleFields: ['backupLoadW', 'backupDurationHours', 'batteryVoltageV', 'depthOfDischarge'], title: 'Battery Sizing Parameters' },
-  'solar-battery-backup-calculator': { visibleFields: ['backupLoadW', 'backupDurationHours', 'stateOfCharge'], title: 'Backup Power Parameters' },
-  'solar-battery-capacity-calculator': { visibleFields: ['batteryCapacityKWh', 'depthOfDischarge', 'batteryEfficiency'], title: 'Capacity Parameters' },
-  'solar-battery-runtime-calculator': { visibleFields: ['batteryCapacityKWh', 'stateOfCharge', 'backupLoadW'], title: 'Runtime Inputs' },
-  'solar-battery-storage-calculator': { visibleFields: ['usage', 'backupDurationHours', 'batteryVoltageV'], defaultFixedMode: 'usage', title: 'Storage Parameters' },
-  'solar-inverter-battery-calculator': { visibleFields: ['backupLoadW', 'batteryVoltageV', 'backupDurationHours'], title: 'Inverter Battery Rating Inputs' },
-  'how-many-solar-panels-do-i-need': { visibleFields: ['usage', 'panelWattage', 'sunHours'], defaultFixedMode: 'usage', title: 'Panel Count Parameters' },
-  'solar-panels-needed-calculator': { visibleFields: ['solarArraySizeKW', 'panelWattage'], title: 'Target Capacity Parameters' },
-  'solar-panels-for-house-calculator': { visibleFields: ['usage', 'panelWattage'], defaultFixedMode: 'usage', title: 'Household Energy Inputs' },
-  'solar-inverter-size-calculator': { visibleFields: ['solarArraySizeKW', 'targetDcAcRatio'], title: 'Inverter Sizing Parameters' },
-  'solar-inverter-capacity-calculator': { visibleFields: ['solarArraySizeKW', 'safetyMargin', 'inverterType'], title: 'Inverter Rating Parameters' },
-  'inverter-load-calculator': { visibleFields: ['runningLoadW', 'peakLoadW', 'safetyMargin'], title: 'Load Wattage Parameters' },
-  'solar-inverter-requirement-calculator': { visibleFields: ['solarArraySizeKW', 'runningLoadW', 'inverterType'], title: 'Inverter Requirement Parameters' },
-  'solar-tilt-angle-calculator': { visibleFields: ['tilt'], title: 'Tilt Parameters' },
-  'solar-panel-angle-calculator': { visibleFields: ['orientation', 'tilt'], title: 'Angle & Direction Parameters' },
-  'solar-irradiance-calculator': { visibleFields: ['sunHours'], title: 'Irradiance Inputs' },
-  'solar-shading-calculator': { visibleFields: ['solarArraySizeKW', 'shading'], title: 'Shading Parameters' },
-  'solar-system-loss-calculator': { visibleFields: ['solarArraySizeKW', 'losses'], title: 'Derate Factor Inputs' },
-  'solar-array-size-calculator': { visibleFields: ['usage', 'sunHours', 'panelWattage'], defaultFixedMode: 'usage', title: 'Array Capacity Inputs' }
-};
-
-  const schema = CALCULATOR_SCHEMAS[calculatorId];
-  const isHidden = (field: string) => {
-    if (hiddenFields.includes(field)) return true;
-    if (schema && schema.visibleFields) {
-      return !schema.visibleFields.includes(field);
-    }
-    return false;
-  };
-
 
   const { user } = useAuth();
   const saveFn = useServerFn(saveCalculation);

@@ -9,6 +9,8 @@ interface InverterResultsProps {
 }
 
 export function InverterResults({ results, type }: InverterResultsProps) {
+  if (!results) return null;
+
   const formatValue = (val: number, unit: string) => {
     return `${val.toLocaleString(undefined, { maximumFractionDigits: 2 })} ${unit}`;
   };
