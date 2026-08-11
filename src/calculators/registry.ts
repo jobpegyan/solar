@@ -940,6 +940,182 @@ export const CALCULATORS: CalculatorDefinition[] = [
         answer: 'With the current central subsidy and rising electricity tariffs, the payback period for residential solar in India is typically 4 to 6 years.'
       }
     ]
+  },
+  {
+    id: 'home-load-solar-calculator',
+    slug: '/home-load-solar-calculator',
+    name: 'Home Load Solar Calculator',
+    shortDescription: 'Calculate your total home electrical load and required solar capacity.',
+    category: 'load',
+    icon: 'Home',
+    status: 'active',
+    featured: true,
+    countries: ['GLOBAL'],
+    seoTitle: 'Home Load Solar Calculator — Size Solar by Household Load',
+    seoDescription: 'Calculate running load, daily energy consumption, and solar system requirements from your household appliances.',
+    faq: [
+      { question: 'How is home electrical load calculated?', answer: 'We sum the total running wattage and operating hours of all active household appliances.' }
+    ]
+  },
+  {
+    id: 'ac-load-solar-calculator',
+    slug: '/ac-load-solar-calculator',
+    name: 'AC Load Solar Calculator',
+    shortDescription: 'Calculate solar system and battery requirements to run air conditioners.',
+    category: 'load',
+    icon: 'Wind',
+    status: 'active',
+    featured: false,
+    countries: ['GLOBAL'],
+    seoTitle: 'AC Load Solar Calculator — Solar System for Air Conditioners',
+    seoDescription: 'Estimate solar panel and battery capacity required to run your air conditioner units.',
+    faq: [
+      { question: 'Can solar run an AC unit?', answer: 'Yes, provided the solar array and inverter are sized to match the running and surge wattage of the AC.' }
+    ]
+  },
+  {
+    id: 'kw-to-solar-panels-calculator',
+    slug: '/kw-to-solar-panels-calculator',
+    name: 'kW to Solar Panels Calculator',
+    shortDescription: 'Convert system capacity (kW) to required solar panel count.',
+    category: 'micro',
+    icon: 'Zap',
+    status: 'active',
+    featured: false,
+    countries: ['GLOBAL'],
+    seoTitle: 'kW to Solar Panels Calculator — Convert kW to Panel Count',
+    seoDescription: 'Quickly convert system capacity in kW to total number of solar panels needed based on panel wattage.',
+    faq: [
+      { question: 'How many 400W panels make 5kW?', answer: '5000W / 400W = 12.5, which rounds up to 13 panels (giving 5.2 kW capacity).' }
+    ]
+  },
+  {
+    id: 'watts-to-solar-panels-calculator',
+    slug: '/watts-to-solar-panels-calculator',
+    name: 'Watts to Solar Panels Calculator',
+    shortDescription: 'Convert total wattage requirement to number of solar panels.',
+    category: 'micro',
+    icon: 'Zap',
+    status: 'active',
+    featured: false,
+    countries: ['GLOBAL'],
+    seoTitle: 'Watts to Solar Panels Calculator — Convert Watts to Panels',
+    seoDescription: 'Convert total wattage requirement into individual solar panel count.',
+    faq: [
+      { question: 'How do I convert Watts to solar panels?', answer: 'Divide total required Watts by the rating of a single solar panel.' }
+    ]
+  },
+  {
+    id: 'electricity-bill-to-solar-size-calculator',
+    slug: '/electricity-bill-to-solar-size-calculator',
+    name: 'Electricity Bill to Solar Size Calculator',
+    shortDescription: 'Estimate solar system size directly from your monthly power bill.',
+    category: 'micro',
+    icon: 'ReceiptText',
+    status: 'active',
+    featured: false,
+    countries: ['GLOBAL'],
+    seoTitle: 'Electricity Bill to Solar Size Calculator — Sizing from Bill',
+    seoDescription: 'Estimate required solar system capacity in kW directly from your monthly electricity bill amount.',
+    faq: [
+      { question: 'Can I size a solar system from just my electricity bill?', answer: 'Yes, by dividing your bill by the local electricity rate, we find your monthly kWh consumption and calculate the required solar system size.' }
+    ]
+  },
+  {
+    id: 'solar-battery-calculator',
+    slug: '/solar-battery-calculator',
+    name: 'Solar Battery Calculator',
+    shortDescription: 'Comprehensive solar battery capacity and backup estimation.',
+    category: 'battery',
+    icon: 'Battery',
+    status: 'active',
+    featured: true,
+    countries: ['GLOBAL'],
+    seoTitle: 'Solar Battery Calculator — Calculate Battery Size & Backup',
+    seoDescription: 'Estimate the battery capacity required for your solar system based on electricity usage and backup requirements.',
+    faq: [
+      { question: 'How big a battery do I need for solar backup?', answer: 'Battery size depends on the total wattage of critical appliances and desired hours of backup runtime.' }
+    ]
+  },
+  {
+    id: 'solar-cost-calculator',
+    slug: '/solar-cost-calculator',
+    name: 'Solar Cost Calculator',
+    shortDescription: 'Detailed price breakdown and cost estimate for solar installation.',
+    category: 'cost-savings',
+    icon: 'DollarSign',
+    status: 'active',
+    featured: true,
+    countries: ['GLOBAL'],
+    seoTitle: 'Solar Cost Calculator — Detailed Price Estimates',
+    seoDescription: 'Break down system costs, equipment, installation, and incentives for your solar energy project.',
+    faq: [
+      { question: 'How much does a solar system cost?', answer: 'Costs vary by system capacity, equipment type, and incentives available in your region.' }
+    ]
+  },
+  {
+    id: 'solar-inverter-calculator',
+    slug: '/solar-inverter-calculator',
+    name: 'Solar Inverter Calculator',
+    shortDescription: 'Find the recommended inverter rating for your solar system.',
+    category: 'inverter',
+    icon: 'Cpu',
+    status: 'active',
+    featured: true,
+    countries: ['GLOBAL'],
+    seoTitle: 'Solar Inverter Calculator — Calculate Recommended Inverter Size',
+    seoDescription: 'Estimate an appropriate inverter size based on your solar panel capacity and electrical load requirements.',
+    faq: [
+      { question: 'How do I choose the right inverter size?', answer: 'Match the inverter AC output capacity to your PV array DC wattage adjusted by the target DC/AC ratio or peak load.' }
+    ]
+  },
+  {
+    id: 'solar-payback-calculator',
+    slug: '/solar-payback-calculator',
+    name: 'Solar Payback Calculator',
+    shortDescription: 'Calculate the break-even time and payback period for solar.',
+    category: 'cost-savings',
+    icon: 'Clock',
+    status: 'active',
+    featured: true,
+    countries: ['GLOBAL'],
+    seoTitle: 'Solar Payback Calculator — Break-Even Estimates',
+    seoDescription: 'Determine your solar investment break-even point and total lifetime savings.',
+    faq: [
+      { question: 'What is a typical payback period for solar?', answer: 'Most residential systems achieve payback within 6 to 10 years.' }
+    ]
+  },
+  {
+    id: 'solar-roi-calculator',
+    slug: '/solar-roi-calculator',
+    name: 'Solar ROI Calculator',
+    shortDescription: '25-year financial projection and Return on Investment for solar.',
+    category: 'cost-savings',
+    icon: 'TrendingUp',
+    status: 'active',
+    featured: true,
+    countries: ['GLOBAL'],
+    seoTitle: 'Solar ROI Calculator — 25-Year Financial Projection',
+    seoDescription: 'Calculate long-term solar ROI, modeling maintenance, panel degradation, and rising electricity costs.',
+    faq: [
+      { question: 'What ROI can I expect from solar?', answer: 'Solar investments typically deliver 200% to 500% simple lifetime return.' }
+    ]
+  },
+  {
+    id: 'solar-savings-calculator',
+    slug: '/solar-savings-calculator',
+    name: 'Solar Savings Calculator',
+    shortDescription: 'Estimate monthly and lifetime electricity savings from solar.',
+    category: 'cost-savings',
+    icon: 'TrendingUp',
+    status: 'active',
+    featured: true,
+    countries: ['GLOBAL'],
+    seoTitle: 'Solar Savings Calculator — Estimate Solar Energy Savings',
+    seoDescription: 'Accurately predict your monthly and 25-year solar electricity bill savings.',
+    faq: [
+      { question: 'How much money can solar save me?', answer: 'Solar can offset 70-100% of your energy charges depending on system sizing and net metering.' }
+    ]
   }
 ];
 

@@ -182,9 +182,54 @@ export const AdvancedResults: React.FC<AdvancedResultsProps> = ({ results, type 
     );
   };
 
+  const renderAngle = () => {
+    const data = results.tilt;
+    if (!data) return null;
+    return (
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <Card className="bg-solar/5 border-solar/20">
+          <CardHeader className="pb-2">
+            <CardTitle className="text-sm font-medium text-solar flex items-center gap-2">
+              <Maximize className="w-4 h-4" />
+              Recommended Tilt Angle
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="text-3xl font-bold text-solar">{data.estimatedTilt}°</div>
+            <p className="text-xs text-muted-foreground mt-1">Latitude: {Math.abs(data.latitude)}°</p>
+          </CardContent>
+        </Card>
+        <Card>
+          <CardHeader className="pb-2">
+            <CardTitle className="text-sm font-medium text-muted-foreground flex items-center gap-2">
+              <Compass className="w-4 h-4 text-solar" />
+              Optimal Azimuth Direction
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">{data.latitude >= 0 ? '180° True South' : '0° True North'}</div>
+            <p className="text-xs text-muted-foreground mt-1">Maximum Solar Exposure</p>
+          </CardContent>
+        </Card>
+        <Card>
+          <CardHeader className="pb-2">
+            <CardTitle className="text-sm font-medium text-muted-foreground flex items-center gap-2">
+              <Sun className="w-4 h-4 text-solar" />
+              Sun Tracking Strategy
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <Badge variant="secondary" className="capitalize">Fixed Array Tilt</Badge>
+            <p className="text-xs text-muted-foreground mt-2">Adjust ±15° seasonally for +5% yield</p>
+          </CardContent>
+        </Card>
+      </div>
+    );
+  };
+
   const renderers: Record<string, () => React.ReactNode> = {
     tilt: renderTilt,
-    angle: renderTilt,
+    angle: renderAngle,
     irradiance: renderIrradiance,
     shading: renderShading,
     loss: renderLosses,

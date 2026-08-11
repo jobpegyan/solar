@@ -52,6 +52,30 @@ describe('Calculator Registry Foundation', () => {
     const comingSoon = active.find((c: any) => c.status === 'coming-soon');
     expect(comingSoon).toBeUndefined();
   });
+
+  it('should find all newly registered load and micro calculators by ID and slug', () => {
+    const ids = [
+      'home-load-solar-calculator',
+      'ac-load-solar-calculator',
+      'kw-to-solar-panels-calculator',
+      'watts-to-solar-panels-calculator',
+      'electricity-bill-to-solar-size-calculator',
+      'solar-battery-calculator',
+      'solar-cost-calculator',
+      'solar-inverter-calculator',
+      'solar-payback-calculator',
+      'solar-roi-calculator',
+      'solar-savings-calculator'
+    ];
+
+    ids.forEach(id => {
+      const calc = getCalculatorById(id);
+      expect(calc, `Calculator with ID '${id}' should be defined in registry`).toBeDefined();
+      const slugCalc = getCalculatorBySlug(calc!.slug);
+      expect(slugCalc, `Calculator with slug '${calc!.slug}' should be found`).toBeDefined();
+    });
+  });
 });
 
 import { getActiveCalculators } from './helpers';
+

@@ -103,9 +103,84 @@ export function InverterResults({ results, type }: InverterResultsProps) {
     </div>
   );
 
+  const renderCapacityResults = () => (
+    <div className="space-y-6">
+      <Card className="bg-indigo-500/5 border-indigo-500/20">
+        <CardHeader className="pb-2">
+          <CardTitle className="text-sm font-medium text-indigo-600 flex items-center gap-2">
+            <Cpu className="w-4 h-4" />
+            Inverter Continuous Capacity
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="text-4xl font-black text-indigo-700">{formatValue(results.estimatedCapacityKW || 0, 'kW / kVA')}</div>
+          <p className="text-xs text-muted-foreground mt-2">Continuous AC power rating requirement</p>
+        </CardContent>
+      </Card>
+
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <Card>
+          <CardHeader className="pb-2">
+            <CardTitle className="text-xs text-muted-foreground uppercase tracking-wider">Safety Margin Buffer</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="text-xl font-bold">{results.inputs?.safetyMargin || 10}% Included</div>
+          </CardContent>
+        </Card>
+        <Card>
+          <CardHeader className="pb-2">
+            <CardTitle className="text-xs text-muted-foreground uppercase tracking-wider">Max Array DC Input</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="text-xl font-bold">{formatValue((results.estimatedCapacityKW || 0) * 1.25, 'kW DC')}</div>
+          </CardContent>
+        </Card>
+      </div>
+    </div>
+  );
+
+  const renderRequirementResults = () => (
+    <div className="space-y-6">
+      <Card className="bg-emerald-500/5 border-emerald-500/20">
+        <CardHeader className="pb-2">
+          <CardTitle className="text-sm font-medium text-emerald-600 flex items-center gap-2">
+            <Zap className="w-4 h-4" />
+            Minimum Inverter Requirement
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="text-4xl font-black text-emerald-700">{formatValue(results.estimatedCapacityKW || 0, 'kW AC')}</div>
+          <p className="text-xs text-muted-foreground mt-2">Class: {results.inputs?.inverterType ? results.inputs.inverterType.toUpperCase() : 'GRID-TIED'} Inverter</p>
+        </CardContent>
+      </Card>
+
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <Card>
+          <CardHeader className="pb-2">
+            <CardTitle className="text-xs text-muted-foreground uppercase tracking-wider">System Compatibility</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="text-xl font-bold capitalize">{results.inputs?.inverterType || 'Grid-Tied'} System</div>
+          </CardContent>
+        </Card>
+        <Card>
+          <CardHeader className="pb-2">
+            <CardTitle className="text-xs text-muted-foreground uppercase tracking-wider">Peak Surge Handling</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="text-xl font-bold">{formatValue((results.estimatedCapacityKW || 0) * 2, 'kW Surge')}</div>
+          </CardContent>
+        </Card>
+      </div>
+    </div>
+  );
+
   return (
     <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
-      {type === 'load' ? renderLoadResults() : renderSizeResults()}
+      {type === 'load' && renderLoadResults()}
+      {type === 'size' && renderSizeResults()}
+      {type === 'capacity' && renderCapacityResults()}
+      {type === 'requirement' && renderRequirementResults()}
       
       <div className="p-4 bg-slate-50 rounded-xl border border-slate-200 flex gap-3">
         <Info className="w-5 h-5 text-slate-500 flex-shrink-0 mt-0.5" />
@@ -119,3 +194,4 @@ export function InverterResults({ results, type }: InverterResultsProps) {
     </div>
   );
 }
+
