@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+import React, { createContext, useContext, useState, useEffect, useCallback, ReactNode } from 'react';
 import { Country, countries, getCountryByCode } from '@/lib/data/countries';
 import { Region, getRegionsByCountry } from '@/lib/data/regions';
 import { UnitSystem } from '@/lib/units/unit-utils';
@@ -60,27 +60,29 @@ export function LocationProvider({ children }: { children: ReactNode }) {
     }));
   }, [country, region, unitPreference, currency]);
 
-  const setCountry = (code: string) => {
+  const setCountry = useCallback((code: string) => {
     const newCountry = getCountryByCode(code);
     setCountryState(newCountry);
     setRegionState(undefined); // Reset region on country change
     setCurrencyState(newCountry.currency);
-  };
+  }, []);
 
-  const setRegion = (code: string | undefined) => {
+  const setRegion = useCallback((code: string | undefined) => {
     if (!code) {
       setRegionState(undefined);
       return;
     }
-    const rs = getRegionsByCountry(country.code);
-    const r = rs.find(item => item.code === code);
-    setRegionState(r);
-  };
+    setCountryState(currCountry => {
+      const rs = getRegionsByCountry(currCountry.code);
+      const r = rs.find(item => item.code === code);
+      setRegionState(r);
+      return currCountry;
+    });
+  }, []);
 
   const effectiveUnitSystem: UnitSystem = unitPreference === 'Automatic' 
     ? country.measurementSystem 
     : unitPreference;
-
 
   const value: LocationContextType = {
     country,

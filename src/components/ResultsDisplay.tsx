@@ -67,18 +67,12 @@ export function ResultsDisplay({ results }: ResultsDisplayProps) {
 
   if (!results) return null;
 
-  const {
-    systemSize,
-    panels,
-    generation,
-    roofArea,
-    monthlySavings,
-    panelWattage,
-    locationName,
-    rate,
-    sunHours,
-    costDetails
-  } = results;
+  const systemSize = results.systemSize ?? results.requiredSystemSizeKW ?? 0;
+  const panels = results.panels ?? results.panelCount ?? 0;
+  const roofArea = results.roofArea ?? results.requiredRoofAreaSqFt ?? 0;
+  const panelWattage = results.panelWattage ?? results.inputs?.panelWattage ?? 400;
+  const locationName = results.locationName ?? results.dataSourceInfo?.region ?? (results.inputs?.regionCode ? `${results.inputs.regionCode}, ${results.inputs.countryCode || 'US'}` : country.name);
+  const costDetails = results.costDetails;
 
   const activeCurrency = costDetails?.currency || results.currency || currency;
 

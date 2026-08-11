@@ -33,7 +33,7 @@ function USASolarCostCalculatorPage() {
     if (country.code !== 'US') {
       setCountry('US');
     }
-  }, [country.code, setCountry]);
+  }, []);
 
   if (!calc) return null;
 
