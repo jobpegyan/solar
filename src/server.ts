@@ -1,7 +1,13 @@
 import "./lib/error-capture";
+import { createMiddleware, createCsrfMiddleware } from "@tanstack/react-start";
 
 import { consumeLastCapturedError } from "./lib/error-capture";
 import { renderErrorPage } from "./lib/error-page";
+
+// Retain middleware functions in SSR server bundle to prevent tree-shaking by Nitro/Vite
+if (typeof globalThis !== "undefined") {
+  (globalThis as any).__tanstack_start_middleware_helpers = { createMiddleware, createCsrfMiddleware };
+}
 
 type ServerEntry = {
   fetch: (request: Request, env: unknown, ctx: unknown) => Promise<Response> | Response;

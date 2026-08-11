@@ -1,6 +1,10 @@
-import { createStart, createMiddleware } from "@tanstack/react-start";
+import { createStart, createMiddleware, createCsrfMiddleware } from "@tanstack/react-start";
 
 import { renderErrorPage } from "./lib/error-page";
+
+if (typeof globalThis !== "undefined") {
+  (globalThis as any).__tanstack_start_start_helpers = { createMiddleware, createCsrfMiddleware };
+}
 
 const errorMiddleware = createMiddleware().server(async ({ next }) => {
   try {
